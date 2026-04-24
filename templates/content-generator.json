@@ -1,0 +1,20 @@
+{
+  "id": "content-generator",
+  "name": "Content Generator",
+  "description": "Multi-stage content creation with outline, draft, and polish phases",
+  "nodes": [
+    { "id": "start", "type": "start", "position": { "x": 100, "y": 200 }, "data": { "label": "Topic & Tone" } },
+    { "id": "outline", "type": "agent", "position": { "x": 300, "y": 200 }, "data": { "label": "Outliner", "model": { "provider": "openai", "model": "gpt-4o-mini" }, "systemPrompt": "Create a detailed outline for the content topic. Include headings, subheadings, and key points for each section.", "temperature": 0.5 } },
+    { "id": "draft", "type": "agent", "position": { "x": 500, "y": 200 }, "data": { "label": "Draft Writer", "model": { "provider": "openai", "model": "gpt-4o-mini" }, "systemPrompt": "Write a full draft based on the outline. Maintain the requested tone and style throughout.", "temperature": 0.7, "maxTokens": 2000 } },
+    { "id": "polish", "type": "agent", "position": { "x": 700, "y": 200 }, "data": { "label": "Editor", "model": { "provider": "openai", "model": "gpt-4o-mini" }, "systemPrompt": "Polish the draft: improve clarity, fix grammar, ensure consistent tone, and add a compelling conclusion.", "temperature": 0.3 } },
+    { "id": "memory", "type": "memory", "position": { "x": 900, "y": 200 }, "data": { "label": "Save Draft", "memoryType": "long-term", "operation": "store", "key": "content_draft" } },
+    { "id": "end", "type": "end", "position": { "x": 1100, "y": 200 }, "data": { "label": "Final" } }
+  ],
+  "edges": [
+    { "id": "e1", "source": "start", "target": "outline" },
+    { "id": "e2", "source": "outline", "target": "draft" },
+    { "id": "e3", "source": "draft", "target": "polish" },
+    { "id": "e4", "source": "polish", "target": "memory" },
+    { "id": "e5", "source": "memory", "target": "end" }
+  ]
+}

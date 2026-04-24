@@ -1,0 +1,21 @@
+{
+  "id": "data-analyst",
+  "name": "Data Analyst",
+  "description": "Automated data analysis with pattern detection, visualization suggestions, and insight generation",
+  "nodes": [
+    { "id": "start", "type": "start", "position": { "x": 100, "y": 200 }, "data": { "label": "Dataset" } },
+    { "id": "parse", "type": "tool", "position": { "x": 300, "y": 200 }, "data": { "label": "Parse Data", "toolType": "custom", "config": { "code": "const input = ctx.variables.input; return { rows: typeof input === 'string' ? input.split('\\n').length : 0, preview: typeof input === 'string' ? input.substring(0, 500) : JSON.stringify(input).substring(0, 500) };" } } },
+    { "id": "analyze", "type": "agent", "position": { "x": 500, "y": 150 }, "data": { "label": "Pattern Finder", "model": { "provider": "openai", "model": "gpt-4o-mini" }, "systemPrompt": "Analyze the dataset preview. Identify patterns, anomalies, and trends. Suggest statistical tests.", "temperature": 0.3 } },
+    { "id": "visualize", "type": "agent", "position": { "x": 500, "y": 300 }, "data": { "label": "Chart Advisor", "model": { "provider": "openai", "model": "gpt-4o-mini" }, "systemPrompt": "Suggest the best visualization types for this data. Include chart type, axes, and why it's appropriate.", "temperature": 0.3 } },
+    { "id": "insight", "type": "agent", "position": { "x": 700, "y": 200 }, "data": { "label": "Insight Generator", "model": { "provider": "openai", "model": "gpt-4o-mini" }, "systemPrompt": "Generate actionable business insights from the analysis and visualization suggestions.", "temperature": 0.5 } },
+    { "id": "end", "type": "end", "position": { "x": 900, "y": 200 }, "data": { "label": "Report" } }
+  ],
+  "edges": [
+    { "id": "e1", "source": "start", "target": "parse" },
+    { "id": "e2", "source": "parse", "target": "analyze" },
+    { "id": "e3", "source": "parse", "target": "visualize" },
+    { "id": "e4", "source": "analyze", "target": "insight" },
+    { "id": "e5", "source": "visualize", "target": "insight" },
+    { "id": "e6", "source": "insight", "target": "end" }
+  ]
+}

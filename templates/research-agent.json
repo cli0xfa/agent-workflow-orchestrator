@@ -1,0 +1,24 @@
+{
+  "id": "research-agent",
+  "name": "Research Assistant",
+  "description": "Deep research workflow with query expansion, multi-source aggregation, and summary generation",
+  "nodes": [
+    { "id": "start", "type": "start", "position": { "x": 100, "y": 200 }, "data": { "label": "Topic" } },
+    { "id": "expand", "type": "agent", "position": { "x": 300, "y": 150 }, "data": { "label": "Query Expander", "model": { "provider": "openai", "model": "gpt-4o-mini" }, "systemPrompt": "Given a research topic, generate 3 specific sub-questions to explore. Format as a JSON array.", "temperature": 0.7 } },
+    { "id": "search1", "type": "tool", "position": { "x": 500, "y": 100 }, "data": { "label": "Web Search 1", "toolType": "http", "config": { "url": "https://api.duckduckgo.com/?q={{query}}&format=json", "method": "GET" } } },
+    { "id": "search2", "type": "tool", "position": { "x": 500, "y": 200 }, "data": { "label": "Web Search 2", "toolType": "http", "config": { "url": "https://api.duckduckgo.com/?q={{query}}&format=json", "method": "GET" } } },
+    { "id": "search3", "type": "tool", "position": { "x": 500, "y": 300 }, "data": { "label": "Web Search 3", "toolType": "http", "config": { "url": "https://api.duckduckgo.com/?q={{query}}&format=json", "method": "GET" } } },
+    { "id": "synthesize", "type": "agent", "position": { "x": 700, "y": 200 }, "data": { "label": "Synthesizer", "model": { "provider": "openai", "model": "gpt-4o-mini" }, "systemPrompt": "Synthesize the search results into a comprehensive research summary with key findings and citations.", "temperature": 0.3 } },
+    { "id": "end", "type": "end", "position": { "x": 900, "y": 200 }, "data": { "label": "Report" } }
+  ],
+  "edges": [
+    { "id": "e1", "source": "start", "target": "expand" },
+    { "id": "e2", "source": "expand", "target": "search1" },
+    { "id": "e3", "source": "expand", "target": "search2" },
+    { "id": "e4", "source": "expand", "target": "search3" },
+    { "id": "e5", "source": "search1", "target": "synthesize" },
+    { "id": "e6", "source": "search2", "target": "synthesize" },
+    { "id": "e7", "source": "search3", "target": "synthesize" },
+    { "id": "e8", "source": "synthesize", "target": "end" }
+  ]
+}

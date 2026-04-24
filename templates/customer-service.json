@@ -1,0 +1,23 @@
+{
+  "id": "customer-service",
+  "name": "Customer Service Agent",
+  "description": "Multi-step customer support workflow with intent classification and response generation",
+  "nodes": [
+    { "id": "start", "type": "start", "position": { "x": 100, "y": 200 }, "data": { "label": "Customer Query" } },
+    { "id": "classify", "type": "agent", "position": { "x": 300, "y": 150 }, "data": { "label": "Intent Classifier", "model": { "provider": "openai", "model": "gpt-4o-mini" }, "systemPrompt": "Classify the customer query into one of: REFUND, TECH_SUPPORT, BILLING, GENERAL. Respond with only the category name.", "temperature": 0.1 } },
+    { "id": "condition", "type": "condition", "position": { "x": 500, "y": 200 }, "data": { "label": "Refund?", "expression": "{{classify}} == REFUND" } },
+    { "id": "refund-agent", "type": "agent", "position": { "x": 700, "y": 100 }, "data": { "label": "Refund Agent", "model": { "provider": "openai", "model": "gpt-4o-mini" }, "systemPrompt": "You are a refund specialist. Help the customer with their refund request politely and efficiently." } },
+    { "id": "support-agent", "type": "agent", "position": { "x": 700, "y": 300 }, "data": { "label": "Support Agent", "model": { "provider": "openai", "model": "gpt-4o-mini" }, "systemPrompt": "You are a technical support specialist. Help the customer with their issue step by step." } },
+    { "id": "memory", "type": "memory", "position": { "x": 900, "y": 200 }, "data": { "label": "Save Context", "memoryType": "short-term", "operation": "store", "key": "last_response" } },
+    { "id": "end", "type": "end", "position": { "x": 1100, "y": 200 }, "data": { "label": "Respond" } }
+  ],
+  "edges": [
+    { "id": "e1", "source": "start", "target": "classify" },
+    { "id": "e2", "source": "classify", "target": "condition" },
+    { "id": "e3", "source": "condition", "target": "refund-agent", "label": "true", "condition": "true" },
+    { "id": "e4", "source": "condition", "target": "support-agent", "label": "false", "condition": "false" },
+    { "id": "e5", "source": "refund-agent", "target": "memory" },
+    { "id": "e6", "source": "support-agent", "target": "memory" },
+    { "id": "e7", "source": "memory", "target": "end" }
+  ]
+}

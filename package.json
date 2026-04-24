@@ -1,0 +1,31 @@
+{
+  "name": "agent-workflow-orchestrator",
+  "version": "1.0.0",
+  "description": "Lightweight AI Agent workflow orchestration framework — node-based visual editor with multi-agent collaboration",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "dev": "npm run dev --workspace=packages/ui",
+    "start": "npm run start --workspace=packages/core",
+    "test": "npm run test --workspaces"
+  },
+  "keywords": [
+    "ai-agent",
+    "workflow",
+    "orchestrator",
+    "mcp",
+    "llm",
+    "automation",
+    "langflow-alternative",
+    "dify-alternative"
+  ],
+  "author": "cli0xfa",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cli0xfa/agent-workflow-orchestrator.git"
+  }
+}

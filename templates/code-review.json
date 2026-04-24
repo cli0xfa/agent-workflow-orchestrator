@@ -1,0 +1,21 @@
+{
+  "id": "code-review",
+  "name": "Code Review Agent",
+  "description": "Automated code review with style check, bug detection, and improvement suggestions",
+  "nodes": [
+    { "id": "start", "type": "start", "position": { "x": 100, "y": 200 }, "data": { "label": "Code Input" } },
+    { "id": "style-check", "type": "agent", "position": { "x": 300, "y": 150 }, "data": { "label": "Style Check", "model": { "provider": "openai", "model": "gpt-4o-mini" }, "systemPrompt": "Check the code for style issues, naming conventions, and formatting problems. List each issue with line references.", "temperature": 0.2 } },
+    { "id": "bug-check", "type": "agent", "position": { "x": 300, "y": 300 }, "data": { "label": "Bug Detection", "model": { "provider": "openai", "model": "gpt-4o-mini" }, "systemPrompt": "Analyze the code for potential bugs, security vulnerabilities, and edge cases. Be thorough.", "temperature": 0.2 } },
+    { "id": "suggest", "type": "agent", "position": { "x": 500, "y": 200 }, "data": { "label": "Suggestions", "model": { "provider": "openai", "model": "gpt-4o-mini" }, "systemPrompt": "Based on the style and bug reports, provide concrete improvement suggestions with code examples." } },
+    { "id": "memory", "type": "memory", "position": { "x": 700, "y": 200 }, "data": { "label": "Store Review", "memoryType": "long-term", "operation": "store", "key": "code_review_result" } },
+    { "id": "end", "type": "end", "position": { "x": 900, "y": 200 }, "data": { "label": "Report" } }
+  ],
+  "edges": [
+    { "id": "e1", "source": "start", "target": "style-check" },
+    { "id": "e2", "source": "start", "target": "bug-check" },
+    { "id": "e3", "source": "style-check", "target": "suggest" },
+    { "id": "e4", "source": "bug-check", "target": "suggest" },
+    { "id": "e5", "source": "suggest", "target": "memory" },
+    { "id": "e6", "source": "memory", "target": "end" }
+  ]
+}
