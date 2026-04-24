@@ -69,6 +69,8 @@ export interface ModelConfig {
   model: string;
   apiKey?: string;
   baseUrl?: string;
+  temperature?: number;
+  maxTokens?: number;
 }
 
 export interface ExecutionContext {

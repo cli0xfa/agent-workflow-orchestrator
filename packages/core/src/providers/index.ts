@@ -107,7 +107,7 @@ class OllamaProvider implements LLMProvider {
     if (!response.ok) {
       throw new Error(`Ollama error: ${response.statusText}`);
     }
-    const data = await response.json();
+    const data = await response.json() as { message?: { content?: string } };
     return {
       content: data.message?.content || '',
     };
